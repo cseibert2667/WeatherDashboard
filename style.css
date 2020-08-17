@@ -6,4 +6,24 @@
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     color: white;
+    width: 100%
+}
+
+.row {
+    width: 100%
+}
+
+.search-stuff {
+    padding: 0;
+}
+
+.form-group {
+    margin: 20px;
+    margin-top: 0px;
+}
+
+.weather {
+    box-sizing: border-box;
+    border: solid;
+    border-radius: 15px;
 }
