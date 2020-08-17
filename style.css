@@ -9,27 +9,6 @@
     width: 100%
 }
 
-.row {
-    width: 100%
-}
-
-.left-panel {
-    float: left;
-    width: 25%;
-}
-
-
-
-.weather {
-    box-sizing: border-box;
-    border: solid 1px;
-    border-radius: 15px;
-    float: right;
-    width: 60%;
-    margin-right: 5%;
-    padding: 5px;
-}
-
-.card {
-    float: left;
+.container-xl {
+    max-width: 1500px;
 }

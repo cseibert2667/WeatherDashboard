@@ -88,7 +88,7 @@ function getFiveDay (cityName) {
     for (let i = 5; i < fiveList.length; i=i+8) {
       let dayIndex = fiveList[i];
       // create new card
-      let $card = $("<div>").addClass("card").attr("style", "width: 18rem");
+      let $card = $("<div>").addClass("card").attr("style", "width: 12rem");
       let $body = $("<div>").addClass("card-body");
       // Retrieves unix timestamp and coverts to user-friendly format
       let fdDate = moment.unix(dayIndex.dt).format("MM/DD/YYYY");
