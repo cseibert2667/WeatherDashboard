@@ -18,6 +18,7 @@ let city = ""
 let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
 let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
 let cities = []
+
 // pulls weather for city on page load
 getWeather("Phoenix");
 
@@ -103,7 +104,7 @@ function getFiveDay (cityName) {
       let fdHum = dayIndex.main.humidity;
       let $hum = $("<p>").addClass("card-text").text("Humidity: "+fdHum+"%");
       
-
+      // appends data to card, card to page
       $($body).append($date, $temp, $hum)
       $($card).append($body)
       $("#5-day").append($card)
@@ -111,3 +112,5 @@ function getFiveDay (cityName) {
   })
 }
 
+
+// loop through whole array and look if dt_text includes "15:00:00"
