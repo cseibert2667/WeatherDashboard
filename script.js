@@ -18,7 +18,7 @@
 
 // let day = moment.unix(456876543).format("MM/DD/YYYY") //converts unix to specified format
 
-let city = "Seattle"
+let city = ""
 
 let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
 let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
@@ -30,9 +30,12 @@ getWeather("Phoenix");
 $("#search-btn").on("click", function (e){
   e.preventDefault();
   city = $("#city-input").val();
+  getWeather(city);
+  $("#5-day").empty();
+
+  // *** instead have this push the item to an array (in local storage), then build the list items using that array in a for loop -- also need to make them clickable
   $city = $("<li>").addClass("list-group-item").text(city)
   $(".list-group").prepend($city);
-  getWeather(city);
 })
 
 function getWeather (city){
