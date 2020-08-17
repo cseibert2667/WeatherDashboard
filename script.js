@@ -12,17 +12,12 @@
 // WHEN I open the weather dashboard
 // THEN I am presented with the last searched city forecast
 
-// 3 separate API calls = basic weather, UV Index, 5-day
-// Use Lat/Lon from 'basic weather' call to find UV & 5-day
-// shoot for data from around 3pm for 5-day forcast
-
-// let day = moment.unix(456876543).format("MM/DD/YYYY") //converts unix to specified format
 
 let city = ""
 
 let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
 let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
-
+let cities = []
 // pulls weather for city on page load
 getWeather("Phoenix");
 
@@ -34,8 +29,12 @@ $("#search-btn").on("click", function (e){
   $("#5-day").empty();
 
   // *** instead have this push the item to an array (in local storage), then build the list items using that array in a for loop -- also need to make them clickable
-  $city = $("<li>").addClass("list-group-item").text(city)
-  $(".list-group").prepend($city);
+  cities.push(city)
+  $(".list-group").empty();
+  cities.forEach((city) => {
+    let $city = $("<li>").addClass("list-group-item").text(city);
+    $(".list-group").prepend($city);
+  })
 })
 
 function getWeather (city){
