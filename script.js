@@ -48,8 +48,8 @@ $.ajax({
   let temp = response.main.temp;
   let tempF = Math.round((temp - 273.15) * 1.8 + 32)
   console.log("Temp(F): "+tempF);
-  let humid = response.main.humidity;
-  console.log("Humidity: "+humid);
+  let hum = response.main.humidity;
+  console.log("Humidity: "+hum);
   let wSpeed = response.wind.speed;
   console.log("Wind Speed: "+wSpeed);
 });
@@ -79,16 +79,36 @@ function getFiveDay (cityName) {
     // loops through index grabbing data from roughly 9 PM UTC (2pm - 5pm US)
     for (let i = 5; i < fiveList.length; i=i+8) {
       let dayIndex = fiveList[i];
+      // create new card
+      let $card = $("<div>").addClass("card").attr("style", "width: 18rem");
+      let $body = $("<div>").addClass("card-body");
       // Retrieves unix timestamp and coverts to user-friendly format
-      let fdDate = moment.unix(dayIndex.dt).format("MM/DD/YYYY")
+      let fdDate = moment.unix(dayIndex.dt).format("MM/DD/YYYY");
+      let $date = $("<h5>").addClass("card-title").text(fdDate);
       console.log(fdDate);
       // Retrieves temp & converts to F
       let fdTemp = dayIndex.main.temp;
       let fdTempF = Math.round((fdTemp - 273.15) * 1.8 + 32);
+      let $temp = $("<p>").addClass("card-text").text("Temperature: "+fdTempF+"°F");
       console.log(fdTempF);
       // Retrieves humidity
-      let fdHumid = dayIndex.main.humidity;
-      console.log(fdHumid);
+      let fdHum = dayIndex.main.humidity;
+      let $hum = $("<p>").addClass("card-text").text("Humidity: "+fdHum+"%");
+      console.log(fdHum);
+
+      $($body).append($date, $temp, $hum)
+      $($card).append($body)
+      $("#5-day").append($card)
     }
   })
 }
+
+{/* <div id="5-day">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title" id="card-date">08/31/1994</h5>
+                <p class="card-text" id="card-temp">Temperature: 420</p>
+                <p class="card-text" id="card-hum">Humidity: 69%</p>
+            </div>
+        </div>
+    </div> */}
