@@ -18,33 +18,48 @@
 
 // let day = moment.unix(456876543).format("MM/DD/YYYY") //converts unix to specified format
 
+let city = "Seattle"
 
 let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
-let city = "Seattle"
 let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
 
-// We then created an AJAX call
-$.ajax({
-  url: queryURL,
-  method: "GET"
-}).then(function (response) {
-  console.log(response); // logs response
-  let date = moment.unix(response.dt).format("MM/DD/YYYY"); // Retrieves current date
-  let cityName = response.name; // city name
-  let lat = response.coord.lat; // latitude
-  let lon = response.coord.lon; // longitude
-  let temp = response.main.temp; // Finds temp
-  let tempF = Math.round((temp - 273.15) * 1.8 + 32); // converts to F
-  let wSpeed = response.wind.speed; // retrieves wind speed
-  let hum = response.main.humidity; // retrieves humidity
-  getUvIndex(lat, lon); // gets UV index & displays on page
-  getFiveDay(cityName); // gets 5-day forecast and builds cards to display data
-  // displays info on page
-  $("#city-name").text(cityName+" "+date);
-  $("#main-temp").text("Temperature: "+tempF+"°F");
-  $("#main-hum").text("Humidity: "+hum+"%");
-  $("#main-wind").text("Wind Speed: "+wSpeed+" mph");
-});
+// pulls weather for city on page load
+getWeather("Phoenix");
+
+// search click finds weather for input city
+$("#search-btn").on("click", function (e){
+  e.preventDefault();
+  city = $("#city-input").val();
+  $city = $("<li>").addClass("list-group-item").text(city)
+  $(".list-group").prepend($city);
+  getWeather(city);
+})
+
+function getWeather (city){
+  let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
+  let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function (response) {
+    console.log(response); // logs response
+    let date = moment.unix(response.dt).format("MM/DD/YYYY"); // Retrieves current date
+    let cityName = response.name; // city name
+    let lat = response.coord.lat; // latitude
+    let lon = response.coord.lon; // longitude
+    let temp = response.main.temp; // Finds temp
+    let tempF = Math.round((temp - 273.15) * 1.8 + 32); // converts to F
+    let wSpeed = response.wind.speed; // retrieves wind speed
+    let hum = response.main.humidity; // retrieves humidity
+    getUvIndex(lat, lon); // gets UV index & displays on page
+    getFiveDay(cityName); // gets 5-day forecast and builds cards to display data
+    // displays info on page
+    $("#city-name").text(cityName+" "+date);
+    $("#main-temp").text("Temperature: "+tempF+"°F");
+    $("#main-hum").text("Humidity: "+hum+"%");
+    $("#main-wind").text("Wind Speed: "+wSpeed+" mph");
+  });
+}
 
 // Retrieves current UV index
 function getUvIndex (lat, lon){
@@ -94,12 +109,3 @@ function getFiveDay (cityName) {
   })
 }
 
-{/* <div id="5-day">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title" id="card-date">08/31/1994</h5>
-                <p class="card-text" id="card-temp">Temperature: 420</p>
-                <p class="card-text" id="card-hum">Humidity: 69%</p>
-            </div>
-        </div>
-    </div> */}

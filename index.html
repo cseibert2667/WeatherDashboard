@@ -19,20 +19,17 @@
     <header>
         <h1 class="header">Weather Dashboard <i class="fas fa-cloud-sun-rain"></i></h1>
     </header>
-    <h5>Search for a City:</h5>
-    <form class="form-inline">
-        <div class="form-group mb-2">
-            <input type="text" class="form-control" placeholder="Search...">
-        </div>
-        <button type="submit" class="btn btn-primary mb-2" id="search-btn"><i class="fas fa-search"></i></button>
-    </form>
-    <ul class="list-group">
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Morbi leo risus</li>
-        <li class="list-group-item">Porta ac consectetur ac</li>
-        <li class="list-group-item">Vestibulum at eros</li>
-    </ul>
+    <div class="left-panel">
+        <h5>Search for a City:</h5>
+        <form class="form-inline">
+            <div class="form-group mb-2">
+                <input type="text" class="form-control" placeholder="Search..." id="city-input">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2" id="search-btn"><i class="fas fa-search"></i></button>
+        </form>
+
+        <ul class="list-group">
+        </ul>
     </div>
     <div class="weather">
         <h3 id="city-name"></h3>
@@ -41,7 +38,7 @@
         <h5 id="main-wind"></h5>
         <h5 id="main-uv"></h5>
     </div>
-    <div id="5-day"></div>
+    <div class="row" id="5-day"></div>
 
 
 

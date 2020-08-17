@@ -13,17 +13,22 @@
     width: 100%
 }
 
-.search-stuff {
-    padding: 0;
+.left-panel {
+    float: left;
+    width: 25%;
 }
 
-.form-group {
-    margin: 20px;
-    margin-top: 0px;
-}
+
 
 .weather {
     box-sizing: border-box;
     border: solid;
     border-radius: 15px;
+    float: right;
+    width: 60%;
+    margin-right: 5%
+}
+
+.card {
+    float: left;
 }
