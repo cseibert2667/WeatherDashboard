@@ -18,6 +18,10 @@
     border-radius: 20px;
 }
 
+.list-group-item:hover {
+    cursor: pointer;
+}
+
 #uv {
     padding: 4px;
     border-radius: 10px;
