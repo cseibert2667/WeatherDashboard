@@ -20,10 +20,30 @@ let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
 let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
 
 
-// pulls weather for city and renders list from local storage
+// ran on initial page load -- if no local storage exists, page will always load Phoenix weather
 pageLoad();
 
-// 
+// search click finds weather for input city
+$("#search-btn").on("click", function (e){
+  e.preventDefault();
+  city = $("#city-input").val();
+  cities.push(city);
+  getWeather(city);
+  renderCities();
+  $(".form-inline").trigger("reset")
+})
+
+// list items show weather data on click
+$("#city-list").on("click", function (e){
+  let element = e.target;
+  if (element.matches("li")) {
+    city = $(element).text();
+    getWeather(city);
+    renderCities();
+  }
+})
+
+// gets cities array from local storage, determines most recently searched city
 function pageLoad() {
   var storedCities = JSON.parse(localStorage.getItem("cities"));
   if (storedCities !== null) {
@@ -35,15 +55,7 @@ function pageLoad() {
   getWeather(city);
 }
 
-// search click finds weather for input city
-$("#search-btn").on("click", function (e){
-  e.preventDefault();
-  city = $("#city-input").val();
-  cities.push(city);
-  getWeather(city);
-  renderCities();
-})
-
+// builds list of cities from local storage
 function renderCities(){
   $("#5-day").empty();
   $(".list-group").empty();
@@ -54,7 +66,8 @@ function renderCities(){
     $(".list-group").prepend($city);
   })
 }
-  
+
+// gets weather data and appends to page
 function getWeather (city){
   let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
   let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
@@ -62,7 +75,6 @@ function getWeather (city){
     url: queryURL,
     method: "GET"
   }).then(function (response) {
-    console.log(response); // logs response
     let date = moment.unix(response.dt).format("MM/DD/YYYY"); // Retrieves current date
     let cityName = response.name; // city name
     let lat = response.coord.lat; // latitude
@@ -111,7 +123,6 @@ function getFiveDay (cityName) {
     url: fiveQuery,
     method: "GET"
   }).then(function (fiveResponse) {
-    console.log(fiveResponse)
     let fiveList = fiveResponse.list;
     for (let i = 0; i < fiveList.length; i++) {
       let dayIndex = fiveList[i];
