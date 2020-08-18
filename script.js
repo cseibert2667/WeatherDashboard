@@ -93,9 +93,9 @@ function getUvIndex (lat, lon){
       $("#uv").attr("class", "uv-low")
     } else if (uvIndex < 6){
       $("#uv").attr("class", "uv-mod")
-    } else if (uvIndex < 8){
+    } else if (uvIndex < 9){
       $("#uv").attr("class", "uv-high")
-    } else if (uvIndex > 10) {
+    } else if (uvIndex > 9) {
       $("#uv").attr("class", "uv-ext")
     }
   })
