@@ -13,31 +13,48 @@
 // THEN I am presented with the last searched city forecast
 
 
-let city = ""
+let cities = []
+let city = "Phoenix"
 
 let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
 let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
-let cities = []
 
-// pulls weather for city on page load
-getWeather("Phoenix");
+
+// pulls weather for city and renders list from local storage
+pageLoad();
+
+// 
+function pageLoad() {
+  var storedCities = JSON.parse(localStorage.getItem("cities"));
+  if (storedCities !== null) {
+    cities = storedCities;
+    index = storedCities.length - 1
+    city = storedCities[index]
+  }
+  renderCities();
+  getWeather(city);
+}
 
 // search click finds weather for input city
 $("#search-btn").on("click", function (e){
   e.preventDefault();
   city = $("#city-input").val();
+  cities.push(city);
   getWeather(city);
-  $("#5-day").empty();
+  renderCities();
+})
 
-  // *** instead have this push the item to an array (in local storage), then build the list items using that array in a for loop -- also need to make them clickable
-  cities.push(city)
+function renderCities(){
+  $("#5-day").empty();
   $(".list-group").empty();
+  
+  localStorage.setItem("cities", JSON.stringify(cities));
   cities.forEach((city) => {
     let $city = $("<li>").addClass("list-group-item").text(city);
     $(".list-group").prepend($city);
   })
-})
-
+}
+  
 function getWeather (city){
   let APIKey = "d9a9ca04881f1da4bcfcc61c47033231";
   let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
@@ -52,10 +69,10 @@ function getWeather (city){
     let lon = response.coord.lon; // longitude
     let temp = response.main.temp; // Finds temp
     let tempF = Math.round((temp - 273.15) * 1.8 + 32); // converts to F
-    let wSpeed = response.wind.speed; // retrieves wind speed
-    let hum = response.main.humidity; // retrieves humidity
-    let iconID = response.weather[0].icon // retrieves icon ID
-    let $icon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+iconID+"@2x.png")
+    let wSpeed = response.wind.speed; // wind speed
+    let hum = response.main.humidity; // humidity
+    let iconID = response.weather[0].icon // icon ID
+    let $icon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+iconID+"@2x.png") // icon
     getUvIndex(lat, lon); // gets UV index & displays on page
     getFiveDay(cityName); // gets 5-day forecast and builds cards to display data
     // displays info on page
@@ -103,22 +120,17 @@ function getFiveDay (cityName) {
         // create new card
         let $card = $("<div>").addClass("card mr-3").attr("style", "width: 12rem");
         let $body = $("<div>").addClass("card-body");
-        // Retrieves unix timestamp and coverts to user-friendly format
-        let fdDate = moment.unix(dayIndex.dt).format("MM/DD/YYYY");
+        let fdDate = moment.unix(dayIndex.dt).format("MM/DD/YYYY"); // converts unix -> date
         let $date = $("<h5>").addClass("card-title").text(fdDate);
-        // Retrieves icon
-        let fdIconID = dayIndex.weather[0].icon
+        let fdIconID = dayIndex.weather[0].icon; // icon
         let $fdIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+fdIconID+"@2x.png")
-        // Retrieves temp & converts to F
-        let fdTemp = dayIndex.main.temp;
-        let fdTempF = Math.round((fdTemp - 273.15) * 1.8 + 32);
+        let fdTemp = dayIndex.main.temp; // temp
+        let fdTempF = Math.round((fdTemp - 273.15) * 1.8 + 32); // convert to F
         let $temp = $("<p>").addClass("card-text").text("Temperature: "+fdTempF+"°F");
-        
-        // Retrieves humidity
-        let fdHum = dayIndex.main.humidity;
+        let fdHum = dayIndex.main.humidity; // humidity
         let $hum = $("<p>").addClass("card-text").text("Humidity: "+fdHum+"%");
         
-        // appends data to card, card to page
+        // appends data to card & card to page
         $($body).append($date, $fdIcon, $temp, $hum)
         $($card).append($body)
         $("#5-day").append($card)
