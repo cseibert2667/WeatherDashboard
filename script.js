@@ -54,10 +54,12 @@ function getWeather (city){
     let tempF = Math.round((temp - 273.15) * 1.8 + 32); // converts to F
     let wSpeed = response.wind.speed; // retrieves wind speed
     let hum = response.main.humidity; // retrieves humidity
+    let iconID = response.weather[0].icon // retrieves icon ID
+    let $icon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+iconID+"@2x.png")
     getUvIndex(lat, lon); // gets UV index & displays on page
     getFiveDay(cityName); // gets 5-day forecast and builds cards to display data
     // displays info on page
-    $("#city-name").text(cityName+" "+date);
+    $("#city-name").text(cityName+" "+date).append($icon);
     $("#main-temp").text("Temperature: "+tempF+"°F");
     $("#main-hum").text("Humidity: "+hum+"%");
     $("#main-wind").text("Wind Speed: "+wSpeed+" mph");
@@ -72,7 +74,16 @@ function getUvIndex (lat, lon){
     method: "GET"
   }).then(function (uvResponse) {
     let uvIndex = uvResponse.value
-    $("#main-uv").text("UV Index: "+uvIndex)
+    $("#uv").text(uvIndex)
+    if (uvIndex < 3){
+      $("#uv").attr("class", "uv-low")
+    } else if (uvIndex < 6){
+      $("#uv").attr("class", "uv-mod")
+    } else if (uvIndex < 8){
+      $("#uv").attr("class", "uv-high")
+    } else if (uvIndex > 10) {
+      $("#uv").attr("class", "uv-ext")
+    }
   })
 }
 
@@ -85,32 +96,33 @@ function getFiveDay (cityName) {
   }).then(function (fiveResponse) {
     console.log(fiveResponse)
     let fiveList = fiveResponse.list;
-    // loops through array grabbing data from roughly 9 PM UTC (2pm - 5pm US)
-    for (let i = 5; i < fiveList.length; i=i+8) {
+    for (let i = 0; i < fiveList.length; i++) {
       let dayIndex = fiveList[i];
-      // create new card
-      let $card = $("<div>").addClass("card").attr("style", "width: 12rem");
-      let $body = $("<div>").addClass("card-body");
-      // Retrieves unix timestamp and coverts to user-friendly format
-      let fdDate = moment.unix(dayIndex.dt).format("MM/DD/YYYY");
-      let $date = $("<h5>").addClass("card-title").text(fdDate);
-      
-      // Retrieves temp & converts to F
-      let fdTemp = dayIndex.main.temp;
-      let fdTempF = Math.round((fdTemp - 273.15) * 1.8 + 32);
-      let $temp = $("<p>").addClass("card-text").text("Temperature: "+fdTempF+"°F");
-      
-      // Retrieves humidity
-      let fdHum = dayIndex.main.humidity;
-      let $hum = $("<p>").addClass("card-text").text("Humidity: "+fdHum+"%");
-      
-      // appends data to card, card to page
-      $($body).append($date, $temp, $hum)
-      $($card).append($body)
-      $("#5-day").append($card)
+      let dateTime = dayIndex.dt_txt;  
+      if (dateTime.includes("21:00")) {  // only runs code if time is 9PM UTC (2-5PM US)
+        // create new card
+        let $card = $("<div>").addClass("card mr-3").attr("style", "width: 12rem");
+        let $body = $("<div>").addClass("card-body");
+        // Retrieves unix timestamp and coverts to user-friendly format
+        let fdDate = moment.unix(dayIndex.dt).format("MM/DD/YYYY");
+        let $date = $("<h5>").addClass("card-title").text(fdDate);
+        // Retrieves icon
+        let fdIconID = dayIndex.weather[0].icon
+        let $fdIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+fdIconID+"@2x.png")
+        // Retrieves temp & converts to F
+        let fdTemp = dayIndex.main.temp;
+        let fdTempF = Math.round((fdTemp - 273.15) * 1.8 + 32);
+        let $temp = $("<p>").addClass("card-text").text("Temperature: "+fdTempF+"°F");
+        
+        // Retrieves humidity
+        let fdHum = dayIndex.main.humidity;
+        let $hum = $("<p>").addClass("card-text").text("Humidity: "+fdHum+"%");
+        
+        // appends data to card, card to page
+        $($body).append($date, $fdIcon, $temp, $hum)
+        $($card).append($body)
+        $("#5-day").append($card)
+      }
     }
   })
 }
-
-
-// loop through whole array and look if dt_text includes "15:00:00"

@@ -12,3 +12,26 @@
 .container-xl {
     max-width: 1500px;
 }
+
+.main {
+    border: solid 2px;
+    border-radius: 20px;
+}
+
+#uv {
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.uv-low {
+    background-color: green;
+}
+.uv-mod {
+    background-color: gold;
+}
+.uv-high {
+    background-color: rgb(255, 136, 0);
+}
+.uv-ext {
+    background-color: red;
+}
