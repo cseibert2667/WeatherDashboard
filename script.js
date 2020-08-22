@@ -82,7 +82,7 @@ function getWeather (city){
 
 // Retrieves current UV index
 function getUvIndex (lat, lon){
-  let uvQuery = "http://api.openweathermap.org/data/2.5/uvi?appid="+APIKey+"&lat="+lat+"&lon="+lon;
+  let uvQuery = "https://api.openweathermap.org/data/2.5/uvi?appid="+APIKey+"&lat="+lat+"&lon="+lon;
   $.ajax({
     url: uvQuery,
     method: "GET"
@@ -103,7 +103,7 @@ function getUvIndex (lat, lon){
 
 // Retrieves 5-day forecast
 function getFiveDay (cityName) {
-  let fiveQuery = "http://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&appid="+APIKey;
+  let fiveQuery = "https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&appid="+APIKey;
   $.ajax({
     url: fiveQuery,
     method: "GET"
